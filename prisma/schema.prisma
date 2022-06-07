@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  Session    Session[]
+  Enrollment Enrollment[]
+
+  @@map("users")
+}
+
+model Session {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  User       User     @relation(fields: [userId], references: [id])
+  token      String
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+
+  @@map("sessions")
+}
+
+model Event {
+  id                     Int      @id @default(autoincrement())
+  title                  String   @db.VarChar(255)
+  backgroundImageUrl     String   @db.VarChar(255) @map("background_image_url")
+  logoImageUrl           String   @db.VarChar(255) @map("logo_image_url")
+  startsAt               DateTime @map("starts_at")
+  endsAt                 DateTime @map("ends_at")
+  onlineEventValue       Int      @map("online_event_value")
+  presentialEventValue   Int      @map("presential_event_value")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  Reservation            Reservation[]
+
+  @@map("events")
+}
+
+model Enrollment {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  cpf         String    @db.VarChar(255)
+  birthday    DateTime
+  phone       String    @db.VarChar(255)
+  userId      Int       @unique @map("user_id")
+  User        User      @relation(fields: [userId], references: [id])
+  Address     Address[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  Reservation Reservation[]
+
+  @@map("enrollments")
+}
+
+model Address {
+  id            Int        @id @default(autoincrement())
+  cep           String     @db.VarChar(255)
+  street        String     @db.VarChar(255)
+  city          String     @db.VarChar(255)
+  state         String     @db.VarChar(255)
+  number        String     @db.VarChar(255)
+  neighborhood  String     @db.VarChar(255)
+  addressDetail String?    @db.VarChar(255) @map("address_detail")
+  enrollmentId  Int        @unique @map("enrollment_id")
+  Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  @@map("addresses")
+}
+
+model Reservation {
+  id            Int        @id @default(autoincrement())
+  type          String     @db.VarChar(255)
+  accommodation Boolean    @default(false)
+  enrollmentId  Int        @unique @map("enrollment_id")
+  Enrollment    Enrollment @relation(fields: [enrollmentId], references: [id])
+  eventId       Int        @map("event_id")
+  Event         Event      @relation(fields: [eventId], references: [id])
+  amount        Int        
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  Payment       Payment[]
+
+  @@map("reservations")
+}
+
+model Payment {
+  id              Int        @id @default(autoincrement())
+  number          String     @db.VarChar(255)
+  name            String
+  validThru       String
+  cvc             String
+  reservationId   Int        @map("reservation_id")
+  Reservation     Reservation      @relation(fields: [reservationId], references: [id])
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@map("payments")
+}
