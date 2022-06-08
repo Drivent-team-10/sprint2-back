@@ -102,15 +102,43 @@ model Reservation {
 }
 
 model Payment {
-  id              Int        @id @default(autoincrement())
-  number          String     @db.VarChar(255)
-  name            String
-  validThru       String
-  cvc             String
-  reservationId   Int        @map("reservation_id")
-  Reservation     Reservation      @relation(fields: [reservationId], references: [id])
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id            Int         @id @default(autoincrement())
+  number        String      @db.VarChar(255)
+  name          String
+  validThru     String
+  cvc           String
+  reservationId Int         @map("reservation_id")
+  Reservation   Reservation @relation(fields: [reservationId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@map("payments")
+}
+
+model Accommodation {
+  id Int @id @default(autoincrement())
+  name String
+
+  accommodationRoom AccommodationRoom[]
+}
+
+model Room {
+  id              Int        @id @default(autoincrement())
+  number Int
+  capacity Int
+  occupation Int
+
+  accommodationRoom AccommodationRoom[]
+
+  @@map("rooms")
+}
+
+model AccommodationRoom {
+  id              Int        @id @default(autoincrement())
+  accommodationId Int
+  accommodation Accommodation @relation(fields: [accommodationId], references: [id])
+  roomId Int
+  room Room @relation(fields: [roomId], references: [id])
+
+  @@map("accommodationsRooms")
 }
