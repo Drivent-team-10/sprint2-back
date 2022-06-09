@@ -17,3 +17,12 @@ export async function paymentsPost(req: AuthenticatedRequest, res: Response) {
 
   res.status(httpStatus.CREATED).json(payment);
 }
+
+export async function paymentsGet(req: AuthenticatedRequest, res: Response) {
+  const { eventId } = req.params;
+  const { userId } = req;
+
+  const payments = await paymentService.findPaymentsByEventIdAndUserId(Number(eventId), userId);
+
+  res.status(200).send(payments);
+}
