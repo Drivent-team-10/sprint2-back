@@ -40,6 +40,7 @@ model Event {
   logoImageUrl           String   @db.VarChar(255) @map("logo_image_url")
   startsAt               DateTime @map("starts_at")
   endsAt                 DateTime @map("ends_at")
+  hosting                Int
   onlineEventValue       Int      @map("online_event_value")
   presentialEventValue   Int      @map("presential_event_value")
   createdAt              DateTime @default(now()) @map("created_at")
