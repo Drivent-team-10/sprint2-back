@@ -47,8 +47,13 @@ async function createNewPayment(paymentData: PaymentInsertData): Promise<Payment
   return payment;
 }
 
+async function findPaymentsByEventIdAndUserId(eventId: number, userId: number) {
+  return paymentRepository.findPaymentsByEventIdAndUserId(eventId, userId);
+}
+
 const paymentService = {
   createNewPayment,
+  findPaymentsByEventIdAndUserId,
 };
 
 export default paymentService;
