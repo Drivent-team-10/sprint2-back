@@ -29,17 +29,6 @@ async function findPaymentsByEventIdAndUserId(eventId: number, userId: number) {
   });
 }
 
-async function findPaymentsType(eventId: number, userId: number) {
-  return prisma.payment.findFirst({
-    where: {
-      Reservation: {
-        eventId,
-        Enrollment: { userId },
-      },
-    },
-  });
-}
-
 const paymentRepository = {
   createPayment,
   findPaymentByReservationId,
