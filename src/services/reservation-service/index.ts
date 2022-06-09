@@ -23,7 +23,12 @@ async function createNewReservation(reservationData: ReservationData) {
 
   const event = await eventsService.getFirstEvent(); // Because the application manages only one event at the moment
 
-  const amount = type === 'online' ? event.onlineEventValue : event.presentialEventValue;
+  const amount =
+    type === 'online'
+      ? event.onlineEventValue
+      : accommodation
+      ? event.presentialEventValue + event.hosting
+      : event.presentialEventValue;
 
   const reservation: Reservation = await reservationRepository.createReservation({
     type,
