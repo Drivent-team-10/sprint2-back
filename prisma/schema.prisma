@@ -122,6 +122,7 @@ model Accommodation {
   name String
 
   accommodationRoom AccommodationRoom[]
+
 }
 
 model Type {

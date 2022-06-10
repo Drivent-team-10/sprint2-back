@@ -19,6 +19,25 @@ async function main() {
     });
   }
 
+  let accommodations = await prisma.accommodation.findMany();
+  if (!accommodations) {
+      await prisma.accommodation.createMany({
+      data: [
+        {
+          name: 'Driven Resort'
+        },
+        {
+          name: 'Driven Palace'
+        }, 
+        {
+          name: 'Driven World'
+        }
+      ],
+      skipDuplicates: true
+    })
+    accommodations = await prisma.accommodation.findMany();
+  }
+
   console.log({ event });
 }
 
