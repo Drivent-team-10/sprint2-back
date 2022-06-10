@@ -10,3 +10,9 @@ export async function reservationsPost(req: AuthenticatedRequest, res: Response)
   const reservation = await reservationService.createNewReservation({ type, accommodation: !!accommodation, userId });
   res.status(httpStatus.CREATED).json(reservation);
 }
+
+export async function getReservation(req: AuthenticatedRequest, res: Response) {
+  const { id } = req.params;
+  const reservation = await reservationService.findReservationById(Number(id));
+  res.status(httpStatus.FOUND).send(reservation);
+}
