@@ -96,7 +96,8 @@ model Reservation {
   amount        Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  room          Int?
+  roomId        Int?
+  room          Room?      @relation(fields: [roomId], references: [id])
 
   Payment Payment[]
 
@@ -144,6 +145,8 @@ model Room {
   type            Type          @relation(fields: [typeId], references: [id])
   number          Int
   occupation      Int           @default(0)
+
+  reservation Reservation[]
 
   @@map("rooms")
 }

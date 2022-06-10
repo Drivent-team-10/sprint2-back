@@ -15,9 +15,21 @@ async function findById(id: number): Promise<Reservation> {
   });
 }
 
+async function update(roomId: number, reservationId: number) {
+  await prisma.reservation.update({
+    where: {
+      id: reservationId,
+    },
+    data: {
+      roomId,
+    },
+  });
+}
+
 const reservationRepository = {
   createReservation,
   findById,
+  update,
 };
 
 export default reservationRepository;
