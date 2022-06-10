@@ -40,6 +40,7 @@ model Event {
   logoImageUrl         String   @map("logo_image_url") @db.VarChar(255)
   startsAt             DateTime @map("starts_at")
   endsAt               DateTime @map("ends_at")
+  hosting              Int
   onlineEventValue     Int      @map("online_event_value")
   presentialEventValue Int      @map("presential_event_value")
   createdAt            DateTime @default(now()) @map("created_at")
@@ -95,7 +96,8 @@ model Reservation {
   amount        Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  room          Int?
+  roomId        Int?
+  room          Room?      @relation(fields: [roomId], references: [id])
 
   Payment Payment[]
 
@@ -117,29 +119,34 @@ model Payment {
 }
 
 model Accommodation {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
 
-  accommodationRoom AccommodationRoom[]
+  room Room[]
+
+  @@map("accommodations")
+}
+
+model Type {
+  id       Int    @id @default(autoincrement())
+  name     String
+  capacity Int
+
+  room Room[]
+
+  @@map("types")
 }
 
 model Room {
-  id              Int        @id @default(autoincrement())
-  number Int
-  capacity Int
-  occupation Int
+  id              Int           @id @default(autoincrement())
+  accommodationId Int
+  accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
+  typeId          Int
+  type            Type          @relation(fields: [typeId], references: [id])
+  number          Int
+  occupation      Int           @default(0)
 
-  accommodationRoom AccommodationRoom[]
+  reservation Reservation[]
 
   @@map("rooms")
-}
-
-model AccommodationRoom {
-  id              Int        @id @default(autoincrement())
-  accommodationId Int
-  accommodation Accommodation @relation(fields: [accommodationId], references: [id])
-  roomId Int
-  room Room @relation(fields: [roomId], references: [id])
-
-  @@map("accommodationsRooms")
 }

@@ -15,9 +15,21 @@ async function findPaymentByReservationId(reservationId: number): Promise<Paymen
   });
 }
 
+async function findPaymentsByEventIdAndUserId(eventId: number, userId: number) {
+  return prisma.payment.findMany({
+    where: {
+      Reservation: {
+        eventId,
+        Enrollment: { userId },
+      },
+    },
+  });
+}
+
 const paymentRepository = {
   createPayment,
   findPaymentByReservationId,
+  findPaymentsByEventIdAndUserId,
 };
 
 export default paymentRepository;
