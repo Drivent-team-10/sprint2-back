@@ -27,6 +27,7 @@ async function update(roomId: number, reservationId: number, action: Action) {
           roomId,
         },
       });
+      break;
     case 'remove':
       await prisma.reservation.update({
         where: {
@@ -36,6 +37,7 @@ async function update(roomId: number, reservationId: number, action: Action) {
           roomId: null,
         },
       });
+      break;
   }
 }
 

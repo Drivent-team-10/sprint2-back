@@ -4,6 +4,11 @@ import reservationRepository from '@/repositories/reservation-repository';
 
 export type Action = 'add' | 'remove';
 
+async function findByAccomodationId(reservationId: number) {
+  const rooms = await roomRepository.findByAccomodationId(reservationId);
+  return rooms;
+}
+
 async function updateRoomReservation(roomId: number, reservationId: number) {
   const room = await roomRepository.findById(roomId);
   const reservation = await reservationRepository.findById(reservationId);
@@ -33,6 +38,7 @@ async function removeRoomReservation(roomId: number, reservationId: number) {
 }
 
 const roomsService = {
+  findByAccomodationId,
   updateRoomReservation,
 };
 
