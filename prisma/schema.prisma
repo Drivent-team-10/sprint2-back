@@ -121,32 +121,29 @@ model Accommodation {
   id   Int    @id @default(autoincrement())
   name String
 
-  accommodationRoom AccommodationRoom[]
+  room Room[]
 
+  @@map("accommodations")
 }
 
 model Type {
   id       Int    @id @default(autoincrement())
   name     String
   capacity Int
+
+  room Room[]
+
+  @@map("types")
 }
 
 model Room {
-  id         Int @id @default(autoincrement())
-  number     Int
-  occupation Int
-
-  accommodationRoom AccommodationRoom[]
-
-  @@map("rooms")
-}
-
-model AccommodationRoom {
   id              Int           @id @default(autoincrement())
   accommodationId Int
   accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
-  roomId          Int
-  room            Room          @relation(fields: [roomId], references: [id])
+  typeId          Int
+  type            Type          @relation(fields: [typeId], references: [id])
+  number          Int
+  occupation      Int           @default(0)
 
-  @@map("accommodationsRooms")
+  @@map("rooms")
 }
