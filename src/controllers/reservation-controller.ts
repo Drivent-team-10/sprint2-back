@@ -14,5 +14,5 @@ export async function reservationsPost(req: AuthenticatedRequest, res: Response)
 export async function getReservation(req: AuthenticatedRequest, res: Response) {
   const { id } = req.params;
   const reservation = await reservationService.findReservationById(Number(id));
-  res.status(httpStatus.FOUND).send(reservation);
+  res.status(200).send(reservation);
 }
