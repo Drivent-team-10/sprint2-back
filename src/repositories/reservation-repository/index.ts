@@ -2,7 +2,7 @@ import { prisma } from '@/config';
 import { Reservation } from '@prisma/client';
 import { Action } from '@/services/rooms-service';
 
-export type ReservationInsertData = Omit<Reservation, 'id' | 'createdAt' | 'updatedAt' | 'room'>;
+export type ReservationInsertData = Omit<Reservation, 'id' | 'createdAt' | 'updatedAt' | 'roomId'>;
 
 async function createReservation(reservationData: ReservationInsertData): Promise<Reservation> {
   return prisma.reservation.create({

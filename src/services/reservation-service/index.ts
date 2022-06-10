@@ -36,7 +36,6 @@ async function createNewReservation(reservationData: ReservationData) {
     enrollmentId: enrollment.id,
     eventId: event.id,
     amount,
-    roomId: 0,
   });
 
   return reservation;
