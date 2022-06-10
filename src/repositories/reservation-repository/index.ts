@@ -39,10 +39,15 @@ async function update(roomId: number, reservationId: number, action: Action) {
   }
 }
 
+async function findByEnrollmentId(id: number): Promise<Reservation> {
+  return prisma.reservation.findUnique({ where: { enrollmentId: id } });
+}
+
 const reservationRepository = {
   createReservation,
   findById,
   update,
+  findByEnrollmentId,
 };
 
 export default reservationRepository;
