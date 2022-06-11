@@ -25,7 +25,7 @@ async function getAccommodationData(): Promise<AccData[]> {
       accommodations.id AS "accommodationId",
       accommodations.name AS accommodation,
       accommodations.capacity AS "capacityTotal",
-      accommodations.ocupation AS occupation,
+      accommodations.occupation AS occupation,
       rooms.type_id = CASE
           WHEN (rooms.type_id = 1) 
               then 1 
