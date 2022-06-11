@@ -23,6 +23,9 @@ async function findPaymentsByEventIdAndUserId(eventId: number, userId: number) {
         Enrollment: { userId },
       },
     },
+    include: {
+      Reservation: true,
+    },
   });
 }
 

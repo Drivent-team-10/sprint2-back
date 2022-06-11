@@ -119,8 +119,10 @@ model Payment {
 }
 
 model Accommodation {
-  id   Int    @id @default(autoincrement())
-  name String
+  id                    Int    @id @default(autoincrement())
+  name                  String
+  capacity              Int
+  occupation             Int         @default(0)
 
   room Room[]
 
@@ -139,9 +141,9 @@ model Type {
 
 model Room {
   id              Int           @id @default(autoincrement())
-  accommodationId Int
+  accommodationId Int   @map("accommodation_id")
   accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
-  typeId          Int
+  typeId          Int   @map("type_id")
   type            Type          @relation(fields: [typeId], references: [id])
   number          Int
   occupation      Int           @default(0)
