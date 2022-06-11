@@ -4,8 +4,12 @@ import { Action } from '@/services/rooms-service';
 
 async function findByAccomodationId(accommodationId: number) {
   return await prisma.room.findMany({
+    orderBy: [{ number: 'asc' }],
     where: {
       accommodationId,
+    },
+    include: {
+      type: true,
     },
   });
 }
