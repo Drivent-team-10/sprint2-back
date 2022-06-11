@@ -50,7 +50,7 @@
   "author": "Alexandre Nunes",
   "license": "ISC",
   "prisma": {
-    "seed": "npm run dev:load-envs -- ts-node prisma/seed.ts"
+    "seed": "npm run dev:load-envs -- ts-node prisma/seeds/seed.ts"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.3.1",

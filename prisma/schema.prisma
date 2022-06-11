@@ -118,35 +118,45 @@ model Payment {
 }
 
 model Accommodation {
-  id   Int    @id @default(autoincrement())
-  name String
+  id                    Int    @id @default(autoincrement())
+  name                  String
+  capacity              Int
+  occupation             Int         @default(0)
 
-  accommodationRoom AccommodationRoom[]
+  Room                  Room[]
 
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  @@map("accommodations")
 }
 
 model Type {
-  id       Int    @id @default(autoincrement())
-  name     String
-  capacity Int
+  id            Int    @id @default(autoincrement())
+  name          String
+  capacity      Int
+
+  Room          Room[]
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@map("types")
 }
 
 model Room {
-  id         Int @id @default(autoincrement())
-  number     Int
-  occupation Int
+  id                  Int         @id @default(autoincrement())
+  number              Int
+  occupation          Int
 
-  accommodationRoom AccommodationRoom[]
+  typeId              Int         @map("type_id")
+  Type                Type        @relation(fields: [typeId], references: [id])
+
+  accommodationId     Int         @map("accommodation_id")
+  Accommodation       Accommodation        @relation(fields: [accommodationId], references: [id])
+
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 
   @@map("rooms")
-}
-
-model AccommodationRoom {
-  id              Int           @id @default(autoincrement())
-  accommodationId Int
-  accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
-  roomId          Int
-  room            Room          @relation(fields: [roomId], references: [id])
-
-  @@map("accommodationsRooms")
 }
