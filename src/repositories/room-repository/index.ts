@@ -1,5 +1,4 @@
 import { prisma } from '@/config';
-import { Accommodation, Type, Room } from '@prisma/client';
 import { Action } from '@/services/rooms-service';
 
 async function findByAccomodationId(accommodationId: number) {
