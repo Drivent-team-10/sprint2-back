@@ -27,7 +27,7 @@ async function findById(id: number) {
 async function update(id: number, action: Action) {
   switch (action) {
     case 'add':
-      return await prisma.room.update({
+      await prisma.room.update({
         where: {
           id,
         },
@@ -35,8 +35,9 @@ async function update(id: number, action: Action) {
           occupation: { increment: 1 },
         },
       });
+      break;
     case 'remove':
-      return await prisma.room.update({
+      await prisma.room.update({
         where: {
           id,
         },
@@ -44,6 +45,7 @@ async function update(id: number, action: Action) {
           occupation: { decrement: 1 },
         },
       });
+      break;
   }
 }
 

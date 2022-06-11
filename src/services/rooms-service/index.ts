@@ -14,7 +14,7 @@ async function updateRoomReservation(roomId: number, reservationId: number) {
   const reservation = await reservationRepository.findById(reservationId);
   if (!room || !reservation) throw notFoundError();
 
-  if (reservation.roomId) await removeRoomReservation(roomId, reservationId);
+  if (reservation.roomId) await removeRoomReservation(reservation.roomId, reservationId);
 
   if ((await verifyVacancy(roomId)) < 1) {
     throw forbiddenError('This room has no vacancy');
