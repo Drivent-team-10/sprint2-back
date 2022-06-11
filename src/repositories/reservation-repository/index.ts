@@ -15,9 +15,14 @@ async function findById(id: number): Promise<Reservation> {
   });
 }
 
+async function findByEnrollmentId(id: number): Promise<Reservation> {
+  return prisma.reservation.findUnique({ where: { enrollmentId: id } });
+}
+
 const reservationRepository = {
   createReservation,
   findById,
+  findByEnrollmentId,
 };
 
 export default reservationRepository;
