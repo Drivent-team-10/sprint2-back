@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import sessionRepository from '@/repositories/session-repository';
 import userRepository from '@/repositories/user-repository';
 import { exclude } from '@/utils/prisma-utils';
@@ -51,20 +52,25 @@ async function getGithubToken(code: string) {
     },
   };
 
+  const scope = 'user:email';
+
   const params = new URLSearchParams({
     client_id: process.env.GITHUB_CLIENT_ID,
     client_secret: process.env.GITHUB_CLIENT_SECRET,
     code: JSON.parse(code),
   });
 
-  const URL = 'https://github.com/login/oauth/access_token?' + params;
+  const URL = 'https://github.com/login/oauth/access_token?' + params + `&scope=${scope} `;
+  console.log('URL: ', URL);
 
   const { data } = await axios.post(URL, null, config);
 
   return data;
 }
 
-async function findGithubUser(token_type: string, access_token: string) {
+async function findGithubUser(access_token: string, token_type: string) {
+  console.log('access_token: ', access_token);
+  console.log('token_type: ', token_type);
   const URL = 'https://api.github.com/user';
 
   const config = {
@@ -76,6 +82,42 @@ async function findGithubUser(token_type: string, access_token: string) {
   const { data } = await axios.get(URL, config);
 
   return data;
+}
+
+async function loginWithGithub(id: number, email: string) {
+  const githubUser = await userRepository.findUserByGitHubId(id);
+
+  if (!githubUser) {
+    if (!email) {
+      const user = await userRepository.insertOneUser({ id });
+
+      const chaveSecreta = process.env.JWT_SECRET;
+
+      delete user.password;
+
+      const token = jwt.sign(user, chaveSecreta);
+
+      return token;
+    }
+
+    const user = await userRepository.upsertUserByEmail({ email: email, githubId: id });
+
+    const chaveSecreta = process.env.JWT_SECRET;
+
+    // delete user.password;
+
+    const token = jwt.sign(user, chaveSecreta);
+
+    return token;
+  }
+
+  const chaveSecreta = process.env.JWT_SECRET;
+
+  delete githubUser.password;
+
+  const token = jwt.sign(githubUser, chaveSecreta);
+
+  return token;
 }
 
 export type SignInParams = Pick<User, 'email' | 'password'>;
@@ -91,6 +133,7 @@ const authenticationService = {
   signIn,
   getGithubToken,
   findGithubUser,
+  loginWithGithub,
 };
 
 export default authenticationService;
