@@ -1,7 +1,8 @@
 import { prisma } from '@/config';
 import { Prisma, User } from '@prisma/client';
 
-// type GithubUser = Pick<User, 'githubId'>;
+type GithubUserId = Partial<User>;
+type UpserGithubData = Pick<User, 'email' | 'githubId'>;
 
 async function findByEmail(email: string, select?: Prisma.UserSelect) {
   const params: Prisma.UserFindUniqueArgs = {
@@ -23,16 +24,28 @@ async function create(data: Prisma.UserUncheckedCreateInput) {
   });
 }
 
-async function insertOneUser({ id }) {
-  return id;
+async function insertOneUser({ githubId }: GithubUserId) {
+  const user = await prisma.user.create({ data: { githubId } });
+  return user;
 }
 
-async function upsertUserByEmail({ email, githubId }) {
-  return { email, githubId };
+async function upsertUserByEmail({ email, githubId }: UpserGithubData) {
+  const user = await prisma.user.upsert({
+    where: {
+      email,
+    },
+    update: {
+      githubId,
+    },
+    create: {
+      githubId,
+    },
+  });
+  return user;
 }
 
 async function findUserByGitHubId(id: number) {
-  return id;
+  return prisma.user.findUnique({ where: { githubId: id } });
 }
 
 const userRepository = {

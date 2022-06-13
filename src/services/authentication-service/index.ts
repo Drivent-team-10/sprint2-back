@@ -89,7 +89,7 @@ async function loginWithGithub(id: number, email: string) {
 
   if (!githubUser) {
     if (!email) {
-      const user = await userRepository.insertOneUser({ id });
+      const user = await userRepository.insertOneUser({ githubId: id });
 
       const chaveSecreta = process.env.JWT_SECRET;
 
