@@ -16,9 +16,10 @@ export async function githubSignIn(req: Request, res: Response) {
   if (!access_token || !token_type) throw Error('Erro de login github');
 
   const userData = await authenticationService.findGithubUser(access_token, token_type);
-  // eslint-disable-next-line no-console
-  console.log('userData: ', userData);
 
-  const token = await authenticationService;
-  res.status(200).send(token);
+  const token = await authenticationService.loginWithGithub(userData.id, userData.email);
+
+  const response = { user: { id: userData.id, email: userData.email }, token };
+
+  res.status(200).json(response);
 }

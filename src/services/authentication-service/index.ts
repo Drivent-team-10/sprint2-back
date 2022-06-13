@@ -61,7 +61,6 @@ async function getGithubToken(code: string) {
   });
 
   const URL = 'https://github.com/login/oauth/access_token?' + params + `&scope=${scope} `;
-  console.log('URL: ', URL);
 
   const { data } = await axios.post(URL, null, config);
 
@@ -69,8 +68,6 @@ async function getGithubToken(code: string) {
 }
 
 async function findGithubUser(access_token: string, token_type: string) {
-  console.log('access_token: ', access_token);
-  console.log('token_type: ', token_type);
   const URL = 'https://api.github.com/user';
 
   const config = {
@@ -104,7 +101,7 @@ async function loginWithGithub(id: number, email: string) {
 
     const chaveSecreta = process.env.JWT_SECRET;
 
-    // delete user.password;
+    delete user.password;
 
     const token = jwt.sign(user, chaveSecreta);
 
