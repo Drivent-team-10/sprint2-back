@@ -9,3 +9,12 @@ export async function singInPost(req: Request, res: Response) {
 
   res.status(httpStatus.OK).send(result);
 }
+
+export async function githubSignIn(req: Request, res: Response) {
+  const code = req.body.code;
+  const { access_token, token_type } = await authenticationService.getGithubToken(JSON.stringify(code));
+  if (!access_token || !token_type) throw Error('Erro de login github');
+
+  const userData = await authenticationService.findGithubUser(access_token, token_type);
+  res.status(200).send(userData);
+}
