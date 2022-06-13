@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import sessionRepository from '@/repositories/session-repository';
 import userRepository from '@/repositories/user-repository';
 import { exclude } from '@/utils/prisma-utils';
 import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import axios from 'axios';
 import { invalidCredentialsError } from './errors';
 
 async function signIn(params: SignInParams): Promise<SignInResult> {
@@ -43,6 +45,78 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
   if (!isPasswordValid) throw invalidCredentialsError();
 }
 
+async function getGithubToken(code: string) {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+    },
+  };
+
+  const scope = 'user:email';
+
+  const params = new URLSearchParams({
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
+    code: JSON.parse(code),
+  });
+
+  const URL = 'https://github.com/login/oauth/access_token?' + params + `&scope=${scope} `;
+
+  const { data } = await axios.post(URL, null, config);
+
+  return data;
+}
+
+async function findGithubUser(access_token: string, token_type: string) {
+  const URL = 'https://api.github.com/user';
+
+  const config = {
+    headers: {
+      Authorization: `${token_type} ${access_token}`,
+    },
+  };
+
+  const { data } = await axios.get(URL, config);
+
+  return data;
+}
+
+async function loginWithGithub(id: number, email: string) {
+  const githubUser = await userRepository.findUserByGitHubId(id);
+
+  if (!githubUser) {
+    if (!email) {
+      const user = await userRepository.insertOneUser({ githubId: id });
+
+      const chaveSecreta = process.env.JWT_SECRET;
+
+      delete user.password;
+
+      const token = jwt.sign(user, chaveSecreta);
+
+      return token;
+    }
+
+    const user = await userRepository.upsertUserByEmail({ email: email, githubId: id });
+
+    const chaveSecreta = process.env.JWT_SECRET;
+
+    delete user.password;
+
+    const token = jwt.sign(user, chaveSecreta);
+
+    return token;
+  }
+
+  const chaveSecreta = process.env.JWT_SECRET;
+
+  delete githubUser.password;
+
+  const token = jwt.sign(githubUser, chaveSecreta);
+
+  return token;
+}
+
 export type SignInParams = Pick<User, 'email' | 'password'>;
 
 type SignInResult = {
@@ -54,6 +128,9 @@ type GetUserOrFailResult = Pick<User, 'id' | 'email' | 'password'>;
 
 const authenticationService = {
   signIn,
+  getGithubToken,
+  findGithubUser,
+  loginWithGithub,
 };
 
 export default authenticationService;

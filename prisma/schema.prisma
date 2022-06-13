@@ -12,12 +12,13 @@ datasource db {
 
 model User {
   id         Int          @id @default(autoincrement())
-  email      String       @unique @db.VarChar(255)
-  password   String       @db.VarChar(255)
+  email      String?      @unique @db.VarChar(255)
+  password   String?      @db.VarChar(255)
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
   Session    Session[]
   Enrollment Enrollment[]
+  githubId   Int?         @unique @map("github_id")
 
   @@map("users")
 }
@@ -119,12 +120,19 @@ model Payment {
 }
 
 model Accommodation {
-  id                    Int    @id @default(autoincrement())
-  name                  String
-  capacity              Int
-  occupation             Int         @default(0)
+  id         Int    @id @default(autoincrement())
+  name       String
+  capacity   Int
+  occupation Int    @default(0)
 
+<<<<<<< HEAD
+  Room Room[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+=======
   room Room[]
+>>>>>>> main
 
   @@map("accommodations")
 }
@@ -134,12 +142,33 @@ model Type {
   name     String
   capacity Int
 
+<<<<<<< HEAD
+  Room Room[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+=======
   room Room[]
+>>>>>>> main
 
   @@map("types")
 }
 
 model Room {
+<<<<<<< HEAD
+  id         Int @id @default(autoincrement())
+  number     Int
+  occupation Int
+
+  typeId Int  @map("type_id")
+  Type   Type @relation(fields: [typeId], references: [id])
+
+  accommodationId Int           @map("accommodation_id")
+  Accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+=======
   id              Int           @id @default(autoincrement())
   accommodationId Int   @map("accommodation_id")
   accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
@@ -149,6 +178,7 @@ model Room {
   occupation      Int           @default(0)
 
   reservation Reservation[]
+>>>>>>> main
 
   @@map("rooms")
 }
