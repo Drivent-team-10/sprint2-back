@@ -5,4 +5,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "accommodations" ADD COLUMN     "capacity" INTEGER NOT NULL;
+ALTER TABLE "accommodations" ADD COLUMN     "capacity" INTEGER NOT NULL,
+ADD COLUMN     "occupation" INTEGER NOT NULL DEFAULT 0;

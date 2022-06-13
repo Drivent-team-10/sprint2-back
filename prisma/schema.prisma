@@ -97,7 +97,8 @@ model Reservation {
   amount        Int
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  room          Int?
+  roomId        Int?
+  room          Room?      @relation(fields: [roomId], references: [id])
 
   Payment Payment[]
 
@@ -124,10 +125,14 @@ model Accommodation {
   capacity   Int
   occupation Int    @default(0)
 
+<<<<<<< HEAD
   Room Room[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+=======
+  room Room[]
+>>>>>>> main
 
   @@map("accommodations")
 }
@@ -137,15 +142,20 @@ model Type {
   name     String
   capacity Int
 
+<<<<<<< HEAD
   Room Room[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+=======
+  room Room[]
+>>>>>>> main
 
   @@map("types")
 }
 
 model Room {
+<<<<<<< HEAD
   id         Int @id @default(autoincrement())
   number     Int
   occupation Int
@@ -158,6 +168,17 @@ model Room {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+=======
+  id              Int           @id @default(autoincrement())
+  accommodationId Int   @map("accommodation_id")
+  accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
+  typeId          Int   @map("type_id")
+  type            Type          @relation(fields: [typeId], references: [id])
+  number          Int
+  occupation      Int           @default(0)
+
+  reservation Reservation[]
+>>>>>>> main
 
   @@map("rooms")
 }

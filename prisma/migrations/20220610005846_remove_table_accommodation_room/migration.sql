@@ -4,6 +4,7 @@
   - You are about to drop the `Accommodation` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Type` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `accommodationsRooms` table. If the table is not empty, all the data it contains will be lost.
+  - Added the required column `accommodationId` to the `rooms` table without a default value. This is not possible if the table is not empty.
 
 */
 -- DropForeignKey
@@ -11,6 +12,9 @@ ALTER TABLE "accommodationsRooms" DROP CONSTRAINT "accommodationsRooms_accommoda
 
 -- DropForeignKey
 ALTER TABLE "accommodationsRooms" DROP CONSTRAINT "accommodationsRooms_roomId_fkey";
+
+-- AlterTable
+ALTER TABLE "rooms" ADD COLUMN     "accommodationId" INTEGER NOT NULL;
 
 -- DropTable
 DROP TABLE "Accommodation";
@@ -38,17 +42,5 @@ CREATE TABLE "types" (
     CONSTRAINT "types_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "accommodations_rooms" (
-    "id" SERIAL NOT NULL,
-    "accommodation_id" INTEGER NOT NULL,
-    "room_id" INTEGER NOT NULL,
-
-    CONSTRAINT "accommodations_rooms_pkey" PRIMARY KEY ("id")
-);
-
 -- AddForeignKey
-ALTER TABLE "accommodations_rooms" ADD CONSTRAINT "accommodations_rooms_accommodation_id_fkey" FOREIGN KEY ("accommodation_id") REFERENCES "accommodations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "accommodations_rooms" ADD CONSTRAINT "accommodations_rooms_room_id_fkey" FOREIGN KEY ("room_id") REFERENCES "rooms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "rooms" ADD CONSTRAINT "rooms_accommodationId_fkey" FOREIGN KEY ("accommodationId") REFERENCES "accommodations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
