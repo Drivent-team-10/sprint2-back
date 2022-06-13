@@ -5,6 +5,7 @@ export interface AccData {
   accommodationId: number;
   accommodation: string;
   capacityTotal: number;
+  image: string;
   occupation: number;
   type1: number;
   type2: number;
@@ -15,17 +16,14 @@ export interface AccData {
   roomId: number;
 }
 
-async function getAccommodationData1() {
-  return prisma.accommodation.findMany({});
-}
-
 async function getAccommodationData(): Promise<AccData[]> {
   const accommodations: PrismaPromise<AccData[]> = prisma.$queryRaw`
     SELECT
       accommodations.id AS "accommodationId",
       accommodations.name AS accommodation,
       accommodations.capacity AS "capacityTotal",
-      accommodations.ocupation AS occupation,
+      accommodations.occupation AS occupation,
+      accommodations.image AS image,
       rooms.type_id = CASE
           WHEN (rooms.type_id = 1) 
               then 1 
@@ -60,8 +58,20 @@ async function getAccommodationData(): Promise<AccData[]> {
   return accommodations;
 }
 
+async function getAccommodationByEnrollment(enrollmentId: number) {
+  return prisma.reservation.findFirst({
+    where: {
+      enrollmentId,
+    },
+    select: {
+      room: true,
+    },
+  });
+}
+
 const accommodationRepository = {
   getAccommodationData,
+  getAccommodationByEnrollment,
 };
 
 export default accommodationRepository;

@@ -7,3 +7,11 @@ export async function getAccommodationData(req: Request, res: Response): Promise
 
   res.status(httpStatus.OK).send(accommodations);
 }
+
+export async function getAccommodationByEnrollment(req: Request, res: Response): Promise<void> {
+  const { enrollmentId } = req.params;
+
+  const accommodation = await accommodationService.getAccommodationByEnrollment(Number(enrollmentId));
+
+  res.status(httpStatus.OK).send(accommodation);
+}

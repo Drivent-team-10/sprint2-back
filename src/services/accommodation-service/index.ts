@@ -7,6 +7,7 @@ async function getAccommodationData() {
     accommodation: {
       id: 1,
       name: accommodations.find((acc) => (acc.accommodationId === 1 ? acc.accommodation : '')).accommodation,
+      image: accommodations.find((acc) => (acc.accommodationId === 1 ? acc.accommodation : '')).image,
       capacityTotal: accommodations.find((acc) => (acc.accommodationId === 1 ? acc.capacityTotal : 12)).capacityTotal,
       occupation: accommodations.reduce((total, num) => {
         return total + (num.accommodationId === 1 ? num.roomOccupation : 0);
@@ -21,6 +22,7 @@ async function getAccommodationData() {
     accommodation: {
       id: 2,
       name: accommodations.find((acc) => (acc.accommodationId === 2 ? acc.accommodation : '')).accommodation,
+      image: accommodations.find((acc) => (acc.accommodationId === 2 ? acc.accommodation : '')).image,
       capacityTotal: accommodations.find((acc) => (acc.accommodationId === 2 ? acc.capacityTotal : 12)).capacityTotal,
       occupation: accommodations.reduce((total, num) => {
         return total + (num.accommodationId === 2 ? num.roomOccupation : 0);
@@ -35,6 +37,7 @@ async function getAccommodationData() {
     accommodation: {
       id: 3,
       name: accommodations.find((acc) => (acc.accommodationId === 3 ? acc.accommodation : '')).accommodation,
+      image: accommodations.find((acc) => (acc.accommodationId === 3 ? acc.accommodation : '')).image,
       capacityTotal: accommodations.find((acc) => (acc.accommodationId === 3 ? acc.capacityTotal : 12)).capacityTotal,
       occupation: accommodations.reduce((total, num) => {
         return total + (num.accommodationId === 3 ? num.roomOccupation : 0);
@@ -50,8 +53,15 @@ async function getAccommodationData() {
   return body;
 }
 
+async function getAccommodationByEnrollment(enrollmentId: number) {
+  const accommodation = await accommodationRepository.getAccommodationByEnrollment(enrollmentId);
+
+  return accommodation;
+}
+
 const accommodationService = {
   getAccommodationData,
+  getAccommodationByEnrollment,
 };
 
 export default accommodationService;
