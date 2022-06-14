@@ -1,5 +1,21 @@
 import { prisma } from '@/config';
-import { PrismaPromise } from '@prisma/client';
+import { PrismaPromise, Accommodation, Type, Room } from '@prisma/client';
+
+async function findMany() {
+  return await prisma.accommodation.findMany();
+}
+
+async function findById(id: number) {
+  return await prisma.room.findMany({
+    where: {
+      accommodationId: id,
+    },
+    include: {
+      Type: true,
+      Accommodation: true,
+    },
+  });
+}
 
 export interface AccData {
   accommodationId: number;
@@ -70,6 +86,8 @@ async function getAccommodationByEnrollment(enrollmentId: number) {
 }
 
 const accommodationRepository = {
+  findMany,
+  findById,
   getAccommodationData,
   getAccommodationByEnrollment,
 };

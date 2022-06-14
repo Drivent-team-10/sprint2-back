@@ -30,7 +30,7 @@ async function createNewReservation(reservationData: ReservationData) {
       ? event.presentialEventValue + event.hosting
       : event.presentialEventValue;
 
-  const reservation: Reservation = await reservationRepository.createReservation({
+  const reservation: Omit<Reservation, 'roomId'> = await reservationRepository.createReservation({
     type,
     accommodation,
     enrollmentId: enrollment.id,
