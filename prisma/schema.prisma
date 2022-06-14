@@ -12,12 +12,13 @@ datasource db {
 
 model User {
   id         Int          @id @default(autoincrement())
-  email      String       @unique @db.VarChar(255)
-  password   String       @db.VarChar(255)
+  email      String?      @unique @db.VarChar(255)
+  password   String?      @db.VarChar(255)
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
   Session    Session[]
   Enrollment Enrollment[]
+  githubId   Int?         @unique @map("github_id")
 
   @@map("users")
 }
@@ -99,8 +100,8 @@ model Reservation {
 
   Payment Payment[]
 
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
 
   @@map("reservations")
 }
@@ -113,8 +114,8 @@ model Payment {
   cvc           String
   reservationId Int         @map("reservation_id")
   Reservation   Reservation @relation(fields: [reservationId], references: [id])
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
 
   @@map("payments")
 }
@@ -126,7 +127,10 @@ model Accommodation {
   occupation            Int         @default(0)
   image                 String?
 
-  room Room[]
+  Room Room[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("accommodations")
 }
@@ -136,19 +140,27 @@ model Type {
   name     String
   capacity Int
 
-  room Room[]
+  Room Room[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("types")
 }
 
 model Room {
-  id              Int             @id @default(autoincrement())
-  accommodationId Int             @map("accommodation_id")
-  accommodation   Accommodation   @relation(fields: [accommodationId], references: [id])
-  typeId          Int             @map("type_id")
-  type            Type            @relation(fields: [typeId], references: [id])
-  number          Int
-  occupation      Int             @default(0)
+  id         Int @id @default(autoincrement())
+  number     Int
+  occupation Int
+
+  accommodationId Int   @map("accommodation_id")
+  Accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
+
+  typeId          Int   @map("type_id")
+  Type            Type          @relation(fields: [typeId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   reservation Reservation[]
 

@@ -11,8 +11,8 @@ async function findById(id: number) {
       accommodationId: id,
     },
     include: {
-      type: true,
-      accommodation: true,
+      Type: true,
+      Accommodation: true,
     },
   });
 }
