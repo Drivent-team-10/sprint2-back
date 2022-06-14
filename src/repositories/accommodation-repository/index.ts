@@ -11,8 +11,8 @@ async function findById(id: number) {
       accommodationId: id,
     },
     include: {
-      Type: true,
-      Accommodation: true,
+      type: true,
+      accommodation: true,
     },
   });
 }
@@ -66,9 +66,7 @@ async function getAccommodationData(): Promise<AccData[]> {
     JOIN accommodations
       ON accommodations.id = rooms.accommodation_id
     JOIN types
-      ON types.id = rooms.type_id
-    WHERE
-      rooms.occupation = 0;
+      ON types.id = rooms.type_id;
   `;
 
   return accommodations;
