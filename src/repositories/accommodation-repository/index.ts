@@ -1,5 +1,20 @@
 import { prisma } from '@/config';
-import { PrismaPromise, Accommodation, Type, Room } from '@prisma/client';
+import { PrismaPromise } from '@prisma/client';
+
+export interface AccData {
+  accommodationId: number;
+  accommodation: string;
+  capacityTotal: number;
+  image: string;
+  occupation: number;
+  type1: number;
+  type2: number;
+  type3: number;
+  typeId: number;
+  roomNumber: number;
+  roomOccupation: number;
+  roomId: number;
+}
 
 async function findMany() {
   return await prisma.accommodation.findMany();
@@ -15,21 +30,6 @@ async function findById(id: number) {
       accommodation: true,
     },
   });
-}
-
-export interface AccData {
-  accommodationId: number;
-  accommodation: string;
-  capacityTotal: number;
-  image: string;
-  occupation: number;
-  type1: number;
-  type2: number;
-  type3: number;
-  typeId: number;
-  roomNumber: number;
-  roomOccupation: number;
-  roomId: number;
 }
 
 async function getAccommodationData(): Promise<AccData[]> {

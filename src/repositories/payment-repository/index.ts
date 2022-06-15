@@ -18,13 +18,13 @@ async function findPaymentByReservationId(reservationId: number): Promise<Paymen
 async function findPaymentsByEventIdAndUserId(eventId: number, userId: number) {
   return prisma.payment.findMany({
     where: {
-      Reservation: {
+      reservation: {
         eventId,
         Enrollment: { userId },
       },
     },
     include: {
-      Reservation: true,
+      reservation: true,
     },
   });
 }
