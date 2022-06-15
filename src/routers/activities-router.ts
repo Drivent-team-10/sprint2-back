@@ -4,6 +4,6 @@ import { Router } from 'express';
 
 const activitiesRouter = Router();
 
-activitiesRouter.get('/:eventId', activityControler.find);
+activitiesRouter.get('/:eventId', authenticateToken, activityControler.find);
 
 export { activitiesRouter };

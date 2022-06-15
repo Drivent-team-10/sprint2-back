@@ -21,6 +21,7 @@ export async function createActivities() {
   if (activities.length < 1) {
     const { id: eventId } = await prisma.event.findFirst({ select: { id: true } });
     for (let i = 0; i < auditoriums.length; i++) {
+      const dayOfEvent = dayjs().add(i, 'day').toDate();
       await prisma.activities.createMany({
         data: [
           {
@@ -29,8 +30,8 @@ export async function createActivities() {
             vacancies: 30,
             occupation: 0,
             eventId: 1,
-            startsAt: dayjs().toDate(),
-            endsAt: dayjs().add(1, 'hour').toDate(),
+            startsAt: dayOfEvent,
+            endsAt: dayjs(dayOfEvent).add(1, 'hour').toDate(),
           },
           {
             auditoriumId: auditoriums[i].id,
@@ -38,14 +39,13 @@ export async function createActivities() {
             vacancies: 30,
             occupation: 0,
             eventId: 1,
-            startsAt: dayjs().add(1, 'day').toDate(),
-            endsAt: dayjs().add(3, 'hour').toDate(),
+            startsAt: dayOfEvent,
+            endsAt: dayjs(dayOfEvent).add(3, 'hour').toDate(),
           },
         ],
       });
     }
     activities = await prisma.activities.findMany();
-    console.log('activities: ', activities);
   }
   return activities;
 }
