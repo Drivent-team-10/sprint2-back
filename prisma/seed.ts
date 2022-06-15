@@ -25,12 +25,15 @@ async function main() {
       data: [
         {
           name: 'Driven Resort',
+          capacity: 25,
         },
         {
           name: 'Driven Palace',
+          capacity: 25,
         },
         {
           name: 'Driven World',
+          capacity: 25,
         },
       ],
     });
@@ -67,28 +70,28 @@ async function main() {
           data: {
             accommodationId: i + 1,
             typeId: 1,
-            number: 100 + j
+            number: 100 + j,
           },
         });
         await prisma.room.create({
           data: {
             accommodationId: i + 1,
             typeId: 2,
-            number: 110 + j
+            number: 110 + j,
           },
         });
         await prisma.room.create({
           data: {
             accommodationId: i + 1,
             typeId: 2,
-            number: 200 + j
+            number: 200 + j,
           },
         });
         await prisma.room.create({
           data: {
             accommodationId: i + 1,
             typeId: 3,
-            number: 210 + j
+            number: 210 + j,
           },
         });
       }
