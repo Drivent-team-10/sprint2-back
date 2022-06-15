@@ -29,6 +29,9 @@ describe('GET /event', () => {
       title: event.title,
       backgroundImageUrl: event.backgroundImageUrl,
       logoImageUrl: event.logoImageUrl,
+      hosting: 35000,
+      onlineEventValue: 10000,
+      presentialEventValue: 25000,
       startsAt: event.startsAt.toISOString(),
       endsAt: event.endsAt.toISOString(),
     });

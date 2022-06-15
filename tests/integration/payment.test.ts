@@ -5,8 +5,8 @@ import * as jwt from 'jsonwebtoken';
 import { cleanDb, generateValidToken } from '../helpers';
 import httpStatus from 'http-status';
 import faker from '@faker-js/faker';
-import { createPaymentData, insertPayment } from '../factories/payment-factory';
 import dayjs from 'dayjs';
+import { createPaymentData, insertPayment } from '../factories';
 
 beforeAll(async () => {
   await init();
