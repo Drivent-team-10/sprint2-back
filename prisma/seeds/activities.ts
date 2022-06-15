@@ -16,8 +16,8 @@ export async function createAuditoriums() {
 
 export async function createActivities() {
   let auditoriums = await prisma.auditoriums.findMany();
-
   let activities = await prisma.activities.findMany();
+
   if (activities.length < 1) {
     const { id: eventId } = await prisma.event.findFirst({ select: { id: true } });
     for (let i = 0; i < auditoriums.length; i++) {
@@ -28,32 +28,24 @@ export async function createActivities() {
             name: faker.name.jobTitle(),
             vacancies: 30,
             occupation: 0,
-            eventId,
+            eventId: 1,
             startsAt: dayjs().toDate(),
-            endsAt: dayjs().add(21, 'days').toDate(),
+            endsAt: dayjs().add(1, 'hour').toDate(),
           },
           {
             auditoriumId: auditoriums[i].id,
             name: faker.name.jobTitle(),
             vacancies: 30,
             occupation: 0,
-            eventId,
-            startsAt: dayjs().toDate(),
-            endsAt: dayjs().add(21, 'days').toDate(),
-          },
-          {
-            auditoriumId: auditoriums[i].id,
-            name: faker.name.jobTitle(),
-            vacancies: 30,
-            occupation: 0,
-            eventId,
-            startsAt: dayjs().toDate(),
-            endsAt: dayjs().add(21, 'days').toDate(),
+            eventId: 1,
+            startsAt: dayjs().add(1, 'day').toDate(),
+            endsAt: dayjs().add(3, 'hour').toDate(),
           },
         ],
       });
     }
     activities = await prisma.activities.findMany();
+    console.log('activities: ', activities);
   }
   return activities;
 }
