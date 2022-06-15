@@ -1,5 +1,5 @@
 import { prisma } from '@/config';
-import { PrismaPromise } from '@prisma/client';
+import { Accommodation, PrismaPromise, Reservation, Room } from '@prisma/client';
 
 export interface AccData {
   accommodationId: number;
@@ -14,6 +14,18 @@ export interface AccData {
   roomNumber: number;
   roomOccupation: number;
   roomId: number;
+}
+
+export interface RoomSelected {
+  id: number;
+  number: number;
+  occupation: number;
+  accommodationId: number;
+  typeId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  reservation: Reservation[];
+  accommodation: Accommodation;
 }
 
 async function findMany() {
@@ -72,13 +84,16 @@ async function getAccommodationData(): Promise<AccData[]> {
   return accommodations;
 }
 
-async function getAccommodationByEnrollment(enrollmentId: number) {
-  return prisma.reservation.findFirst({
-    where: {
-      enrollmentId,
-    },
-    select: {
-      room: true,
+async function getAccommodationByEnrollment(enrollmentId: number): Promise<RoomSelected> {
+  return prisma.room.findFirst({
+    include: {
+      reservation: {
+        where: {
+          enrollmentId,
+        },
+      },
+      type: true,
+      accommodation: true,
     },
   });
 }

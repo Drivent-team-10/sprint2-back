@@ -1,5 +1,5 @@
 import { notFoundError } from '@/errors';
-import accommodationRepository from '@/repositories/accommodation-repository';
+import accommodationRepository, { RoomSelected } from '@/repositories/accommodation-repository';
 import { Room } from '@prisma/client';
 
 async function getAccommodationData() {
@@ -55,7 +55,7 @@ async function getAccommodationData() {
   return body;
 }
 
-async function getAccommodationByEnrollment(enrollmentId: number): Promise<{ room: Room }> {
+async function getAccommodationByEnrollment(enrollmentId: number): Promise<RoomSelected> {
   const accommodation = await accommodationRepository.getAccommodationByEnrollment(enrollmentId);
 
   return accommodation;
