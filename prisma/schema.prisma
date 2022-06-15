@@ -165,7 +165,7 @@ model Activities {
   auditorium   Auditoriums @relation(fields: [auditoriumId], references: [id])
   auditoriumId Int         @map("auditorium_id")
   event        Event       @relation(fields: [eventId], references: [id])
-  eventId      Int         
+  eventId      Int         @map("event_id")
 
   @@map("activities")
 }
