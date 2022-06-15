@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import dayjs from 'dayjs';
+import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -98,8 +99,54 @@ async function main() {
     }
     rooms = await prisma.room.findMany();
   }
+  let auditoriums = await prisma.auditoriums.findMany();
+  if (auditoriums.length < 1) {
+    await prisma.auditoriums.createMany({
+      data: [{ name: 'Auditório Principal' }, { name: 'Auditório Lateral' }, { name: 'Sala de Workshop' }],
+    });
+    auditoriums = await prisma.auditoriums.findMany();
+  }
 
-  console.log({ event, accommodations, types, rooms });
+  let activities = await prisma.activities.findMany();
+  if (activities.length < 1) {
+    const { id: eventId } = await prisma.event.findFirst({ select: { id: true } });
+    for (let i = 0; i < auditoriums.length; i++) {
+      await prisma.activities.createMany({
+        data: [
+          {
+            auditoriumId: auditoriums[i].id,
+            name: faker.name.jobTitle(),
+            vacancies: 30,
+            occupation: 0,
+            eventId,
+            startsAt: dayjs().toDate(),
+            endsAt: dayjs().add(21, 'days').toDate(),
+          },
+          {
+            auditoriumId: auditoriums[i].id,
+            name: faker.name.jobTitle(),
+            vacancies: 30,
+            occupation: 0,
+            eventId,
+            startsAt: dayjs().toDate(),
+            endsAt: dayjs().add(21, 'days').toDate(),
+          },
+          {
+            auditoriumId: auditoriums[i].id,
+            name: faker.name.jobTitle(),
+            vacancies: 30,
+            occupation: 0,
+            eventId,
+            startsAt: dayjs().toDate(),
+            endsAt: dayjs().add(21, 'days').toDate(),
+          },
+        ],
+      });
+    }
+    activities = await prisma.activities.findMany();
+  }
+
+  console.log({ event, accommodations, types, rooms, auditoriums, activities });
 }
 
 main()
