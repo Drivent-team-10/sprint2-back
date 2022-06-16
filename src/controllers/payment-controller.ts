@@ -1,6 +1,6 @@
 import { AuthenticatedRequest } from '@/middlewares';
 import { PaymentInsertData } from '@/repositories/payment-repository';
-import paymentService from '@/services/payment-service';
+import { paymentService } from '@/services';
 import { Response } from 'express';
 import httpStatus from 'http-status';
 
