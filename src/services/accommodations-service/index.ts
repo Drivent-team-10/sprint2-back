@@ -55,7 +55,7 @@ async function getAccommodationData() {
   return body;
 }
 
-async function getAccommodationByEnrollment(enrollmentId: number): Promise<RoomSelected> {
+async function getAccommodationByEnrollment(enrollmentId: number) {
   const accommodation = await accommodationRepository.getAccommodationByEnrollment(enrollmentId);
 
   return accommodation;

@@ -1,5 +1,5 @@
 import { prisma } from '@/config';
-import { Accommodation, PrismaPromise, Reservation, Room } from '@prisma/client';
+import { Accommodation, PrismaClient, PrismaPromise, Reservation, Room } from '@prisma/client';
 
 export interface AccData {
   accommodationId: number;
@@ -24,7 +24,6 @@ export interface RoomSelected {
   typeId: number;
   createdAt: Date;
   updatedAt: Date;
-  reservation: Reservation[];
   accommodation: Accommodation;
 }
 
@@ -84,18 +83,24 @@ async function getAccommodationData(): Promise<AccData[]> {
   return accommodations;
 }
 
-async function getAccommodationByEnrollment(enrollmentId: number): Promise<RoomSelected> {
-  return prisma.room.findFirst({
+async function getAccommodationByEnrollment(enrollmentId: number) {
+  const reservation: Reservation = await prisma.reservation.findFirst({
+    where: {
+      enrollmentId,
+    },
+  });
+
+  if (!reservation?.roomId) {
+    return null;
+  }
+  const room: RoomSelected = await prisma.room.findFirst({
     include: {
-      reservation: {
-        where: {
-          enrollmentId,
-        },
-      },
       type: true,
       accommodation: true,
     },
   });
+
+  return room;
 }
 
 const accommodationRepository = {
