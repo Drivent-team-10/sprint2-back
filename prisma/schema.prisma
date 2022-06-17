@@ -150,12 +150,6 @@ model Type {
 }
 
 model Room {
-<<<<<<< HEAD
-  id              Int           @id @default(autoincrement())
-  accommodationId Int           @map("accommodation_id")
-  accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
-  typeId          Int           @map("type_id")
-=======
   id         Int @id @default(autoincrement())
   number     Int
   occupation Int
@@ -164,7 +158,6 @@ model Room {
   accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
 
   typeId          Int   @map("type_id")
->>>>>>> main
   type            Type          @relation(fields: [typeId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
