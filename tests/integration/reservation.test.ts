@@ -2,11 +2,10 @@ import app, { init } from '@/app';
 import supertest from 'supertest';
 import * as jwt from 'jsonwebtoken';
 
-import { createUser } from '../factories';
+import { createOnlineReservationData, createUser } from '../factories';
 import { cleanDb, generateValidToken } from '../helpers';
 import httpStatus from 'http-status';
 import faker from '@faker-js/faker';
-import { createOnlineReservationData } from '../factories/reservation-factory';
 
 beforeAll(async () => {
   await init();

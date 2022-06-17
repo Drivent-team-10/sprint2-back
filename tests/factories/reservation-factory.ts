@@ -16,7 +16,12 @@ export async function createOnlineReservationData(
   const enrollment = await createEnrollmentWithAddress(user);
   const event = await createEvent();
 
-  const amount = type === 'online' ? event.onlineEventValue : event.presentialEventValue;
+  const amount =
+    type === 'online'
+      ? event.onlineEventValue
+      : accommodation
+      ? event.presentialEventValue + event.hosting
+      : event.presentialEventValue;
 
   const reservationInsertData = {
     type,
