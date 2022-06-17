@@ -88,31 +88,25 @@ async function loginWithGithub(id: number, email: string) {
     if (!email) {
       const user = await userRepository.insertOneUser({ githubId: id });
 
-      const chaveSecreta = process.env.JWT_SECRET;
-
       delete user.password;
 
-      const token = jwt.sign(user, chaveSecreta);
+      const token = await createSession(user.id);
 
       return token;
     }
 
     const user = await userRepository.upsertUserByEmail({ email: email, githubId: id });
 
-    const chaveSecreta = process.env.JWT_SECRET;
-
     delete user.password;
 
-    const token = jwt.sign(user, chaveSecreta);
+    const token = await createSession(user.id);
 
     return token;
   }
 
-  const chaveSecreta = process.env.JWT_SECRET;
-
   delete githubUser.password;
 
-  const token = jwt.sign(githubUser, chaveSecreta);
+  const token = await createSession(githubUser.id);
 
   return token;
 }
