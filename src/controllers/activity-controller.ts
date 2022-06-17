@@ -8,6 +8,10 @@ async function find(req: Request, res: Response) {
   res.status(200).send(activities);
 }
 
-const activityControler = { find };
+async function enroll(req: Request, res: Response) {
+  res.status(200).send(req.params);
+}
+
+const activityControler = { find, enroll };
 
 export default activityControler;
