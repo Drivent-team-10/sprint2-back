@@ -48,7 +48,7 @@ model Event {
   updatedAt            DateTime @updatedAt @map("updated_at")
 
   Reservation Reservation[]
-  Activities  Activities[]
+  Activities  Activity[]
 
   @@map("events")
 }
@@ -168,14 +168,14 @@ model Room {
   @@map("rooms")
 }
 
-model Activities {
+model Activity {
   id           Int         @id @default(autoincrement())
   name         String
   startsAt     DateTime    @map("starts_at")
   endsAt       DateTime    @map("ends_at")
   vacancies    Int
   occupation   Int         @default(0)
-  auditorium   Auditoriums @relation(fields: [auditoriumId], references: [id])
+  auditorium   Auditorium @relation(fields: [auditoriumId], references: [id])
   auditoriumId Int         @map("auditorium_id")
   event        Event       @relation(fields: [eventId], references: [id])
   eventId      Int         @map("event_id")
@@ -183,11 +183,11 @@ model Activities {
   @@map("activities")
 }
 
-model Auditoriums {
+model Auditorium {
   id   Int    @id @default(autoincrement())
   name String
 
-  Activities Activities[]
+  activity Activity[]
 
   @@map("auditoriums")
 }
