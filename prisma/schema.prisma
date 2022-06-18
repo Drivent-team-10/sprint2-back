@@ -100,6 +100,7 @@ model Reservation {
   room          Room?      @relation(fields: [roomId], references: [id])
 
   Payment Payment[]
+  ActivityRegistration ActivityRegistration[]
 
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
@@ -174,11 +175,13 @@ model Activity {
   startsAt     DateTime    @map("starts_at")
   endsAt       DateTime    @map("ends_at")
   vacancies    Int
-  occupation   Int         @default(0)
-  auditorium   Auditorium @relation(fields: [auditoriumId], references: [id])
+  
+  auditorium   Auditorium  @relation(fields: [auditoriumId], references: [id])
   auditoriumId Int         @map("auditorium_id")
   event        Event       @relation(fields: [eventId], references: [id])
   eventId      Int         @map("event_id")
+
+  activityRegistration            ActivityRegistration[]
 
   @@map("activities")
 }
@@ -190,4 +193,20 @@ model Auditorium {
   activity Activity[]
 
   @@map("auditoriums")
+}
+
+model ActivityRegistration {
+  id           Int         @id @default(autoincrement())
+  name         String
+  
+  reservationId Int         @map("reservation_id")
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+
+  activityId Int            @map("activity_id")
+  activity   Activity       @relation(fields: [activityId], references: [id])
+
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("activities_registrations")
 }
