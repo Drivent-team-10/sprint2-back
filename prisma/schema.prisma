@@ -197,7 +197,6 @@ model Auditorium {
 
 model ActivityRegistration {
   id           Int         @id @default(autoincrement())
-  name         String
   
   reservationId Int         @map("reservation_id")
   reservation   Reservation @relation(fields: [reservationId], references: [id])
