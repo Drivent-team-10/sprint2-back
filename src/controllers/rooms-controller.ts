@@ -1,5 +1,5 @@
 import { AuthenticatedRequest } from '@/middlewares';
-import roomsService from '@/services/rooms-service';
+import { roomsService } from '@/services';
 import { Response } from 'express';
 import httpStatus from 'http-status';
 

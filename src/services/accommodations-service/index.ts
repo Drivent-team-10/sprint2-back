@@ -1,6 +1,5 @@
 import { notFoundError } from '@/errors';
-import accommodationRepository, { RoomSelected } from '@/repositories/accommodation-repository';
-import { Room } from '@prisma/client';
+import accommodationRepository from '@/repositories/accommodation-repository';
 
 async function getAccommodationData() {
   const accommodations = await accommodationRepository.getAccommodationData();

@@ -2,7 +2,7 @@ import { notFoundError } from '@/errors';
 import reservationRepository from '@/repositories/reservation-repository';
 import { Reservation } from '@prisma/client';
 import enrollmentsService from '../enrollments-service';
-import eventsService from '../events-service';
+import { eventsService } from '../events-service';
 
 export type ReservationType = 'online' | 'presential';
 
@@ -51,9 +51,7 @@ async function findReservationById(id: number) {
   return reservation;
 }
 
-const reservationService = {
+export const reservationService = {
   createNewReservation,
   findReservationById,
 };
-
-export default reservationService;

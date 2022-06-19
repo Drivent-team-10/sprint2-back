@@ -25,9 +25,7 @@ async function isCurrentEventActive(): Promise<boolean> {
   return now.isAfter(eventStartsAt) && now.isBefore(eventEndsAt);
 }
 
-const eventsService = {
+export const eventsService = {
   getFirstEvent,
   isCurrentEventActive,
 };
-
-export default eventsService;
