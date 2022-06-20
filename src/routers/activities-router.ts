@@ -5,6 +5,6 @@ import { Router } from 'express';
 const activitiesRouter = Router();
 
 activitiesRouter.get('/:eventId', authenticateToken, activityControler.find);
-activitiesRouter.post('/:eventId/activityId', authenticateToken);
+activitiesRouter.post('/:eventId/enroll/:activityId', authenticateToken);
 
 export { activitiesRouter };
