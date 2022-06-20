@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import activityRepository from '@/repositories/activity-repository';
 import { conflictError } from '@/errors';
 import { Activities } from '@prisma/client';
@@ -30,7 +29,6 @@ async function enroll(userId: number, activityId: number) {
 function verifyConflictingActivities(activity1: Activities, activity2: Activities) {
   dayjs.extend(isBetween);
   const isConflicting = dayjs(activity1.startsAt).isBetween(activity2.startsAt, activity2.endsAt);
-  console.log('isConflicting: ', isConflicting);
   return isConflicting;
 }
 
