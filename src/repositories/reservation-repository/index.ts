@@ -13,6 +13,13 @@ async function createReservation(reservationData: ReservationInsertData): Promis
 async function findById(id: number): Promise<Reservation> {
   return prisma.reservation.findFirst({
     where: { id },
+    include: {
+      room: {
+        include: {
+          accommodation: true,
+        },
+      },
+    },
   });
 }
 
