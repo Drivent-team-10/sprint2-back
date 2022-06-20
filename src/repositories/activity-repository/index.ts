@@ -13,16 +13,6 @@ async function findOccupation(activityId: number) {
       activity: true,
     },
   });
-
-  // await prisma.activityRegistration.groupBy({
-  //   by: ['activityId'],
-  //   _count: {
-  //     activityId: true,
-  //   },
-  //   where: {
-  //     activityId,
-  //   },
-  // });
 }
 
 const activityRepository = {
