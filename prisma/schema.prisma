@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  email      String?      @unique @db.VarChar(255)
-  password   String?      @db.VarChar(255)
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
-  Session    Session[]
-  Enrollment Enrollment[]
-  githubId   Int?         @unique @map("github_id")
+  id           Int               @id @default(autoincrement())
+  email        String?           @unique @db.VarChar(255)
+  password     String?           @db.VarChar(255)
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  Session      Session[]
+  Enrollment   Enrollment[]
+  githubId     Int?              @unique @map("github_id")
+  activityUser ActivitiesUsers[]
 
   @@map("users")
 }
@@ -48,7 +49,7 @@ model Event {
   updatedAt            DateTime @updatedAt @map("updated_at")
 
   Reservation Reservation[]
-  Activities  Activities[]
+  Activities  Activity[]
 
   @@map("events")
 }
@@ -100,9 +101,10 @@ model Reservation {
   room          Room?      @relation(fields: [roomId], references: [id])
 
   Payment Payment[]
+  ActivityRegistration ActivityRegistration[]
 
-  createdAt     DateTime   @default(now()) @map("created_at")
-  updatedAt     DateTime   @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("reservations")
 }
@@ -122,11 +124,11 @@ model Payment {
 }
 
 model Accommodation {
-  id                    Int         @id @default(autoincrement())
-  name                  String
-  capacity              Int
-  occupation            Int         @default(0)
-  image                 String?
+  id         Int     @id @default(autoincrement())
+  name       String
+  capacity   Int
+  occupation Int     @default(0)
+  image      String?
 
   room Room[]
 
@@ -154,11 +156,11 @@ model Room {
   number     Int
   occupation Int
 
-  accommodationId Int   @map("accommodation_id")
+  accommodationId Int           @map("accommodation_id")
   accommodation   Accommodation @relation(fields: [accommodationId], references: [id])
 
-  typeId          Int   @map("type_id")
-  type            Type          @relation(fields: [typeId], references: [id])
+  typeId Int  @map("type_id")
+  type   Type @relation(fields: [typeId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -168,26 +170,54 @@ model Room {
   @@map("rooms")
 }
 
-model Activities {
+model Activity {
   id           Int         @id @default(autoincrement())
   name         String
-  startsAt     DateTime    @map("starts_at")
-  endsAt       DateTime    @map("ends_at")
-  vacancies    Int
-  occupation   Int         @default(0)
-  auditorium   Auditoriums @relation(fields: [auditoriumId], references: [id])
+  startsAt     DateTime          @map("starts_at")
+  endsAt       DateTime          @map("ends_at")
+  vacancies    Int  
+  auditorium   Auditorium  @relation(fields: [auditoriumId], references: [id])
   auditoriumId Int         @map("auditorium_id")
   event        Event       @relation(fields: [eventId], references: [id])
   eventId      Int         @map("event_id")
 
+  activityUser ActivitiesUsers[]
+
+  activityRegistration            ActivityRegistration[]
+
   @@map("activities")
 }
 
-model Auditoriums {
+model Auditorium {
   id   Int    @id @default(autoincrement())
   name String
 
-  Activities Activities[]
+  activity Activity[]
 
   @@map("auditoriums")
+}
+
+model ActivityRegistration {
+  id           Int          @id @default(autoincrement())
+  
+  reservationId Int         @map("reservation_id")
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+
+  activityId Int            @map("activity_id")
+  activity   Activity       @relation(fields: [activityId], references: [id])
+
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  @@map("activities_registrations")
+}
+
+model ActivitiesUsers {
+  id         Int        @id @default(autoincrement())
+  userId     Int        @map("user_id")
+  user       User       @relation(fields: [userId], references: [id])
+  activityId Int        @map("activity_id")
+  activity   Activity   @relation(fields: [activityId], references: [id])
+
+  @@map("activitiesUsers")
 }

@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { conflictError, forbiddenError, notFoundError } from '@/errors';
 import paymentRepository, { PaymentInsertData } from '@/repositories/payment-repository';
 import { Payment } from '@prisma/client';
-import reservationService from '../reservations-service';
+import { reservationService } from '../reservations-service';
 
 async function verifyExpirationDate(expirationDate: string): Promise<void> {
   const now = dayjs().format('MM/YY');

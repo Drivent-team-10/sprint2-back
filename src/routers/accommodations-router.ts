@@ -1,5 +1,5 @@
+import { getAccommodationByEnrollment, getAccommodationData } from '@/controllers';
 import { Router } from 'express';
-import { getAccommodationByEnrollment, getAccommodationData } from '@/controllers/accommodation-controller';
 
 const accommodationsRouter = Router();
 

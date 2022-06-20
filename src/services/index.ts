@@ -6,3 +6,4 @@ export * from './reservations-service';
 export * from './accommodations-service';
 export * from './rooms-service';
 export * from './payments-service';
+export * from './activities-service';
