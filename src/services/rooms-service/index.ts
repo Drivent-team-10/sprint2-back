@@ -37,9 +37,7 @@ async function removeRoomReservation(roomId: number, reservationId: number) {
   await reservationRepository.update(roomId, reservationId, 'remove');
 }
 
-const roomsService = {
+export const roomsService = {
   findByAccomodationId,
   updateRoomReservation,
 };
-
-export default roomsService;

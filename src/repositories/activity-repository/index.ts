@@ -6,11 +6,11 @@ export interface InsertActivitiesUsers {
 }
 
 async function findById(id: number) {
-  return await prisma.activities.findUnique({ where: { id } });
+  return await prisma.activity.findUnique({ where: { id } });
 }
 
 async function findByEventId(id: number) {
-  return await prisma.activities.findMany({ where: { eventId: id }, include: { auditorium: true } });
+  return await prisma.activity.findMany({ where: { eventId: id }, include: { auditorium: true } });
 }
 
 async function findByUserId(userId: number) {
@@ -18,7 +18,7 @@ async function findByUserId(userId: number) {
   const result = [];
   for (let i = 0; i < activitiesIds.length; i++) {
     const { activityId } = activitiesIds[i];
-    const activity = await prisma.activities.findUnique({ where: { id: activityId } });
+    const activity = await prisma.activity.findUnique({ where: { id: activityId } });
     result.push(activity);
   }
   return result;
@@ -29,10 +29,20 @@ async function enrollInActivity({ activityId, userId }: InsertActivitiesUsers) {
 }
 
 async function updateActivityOcupation(activityId: number) {
-  const sum = await prisma.activitiesUsers.count({ where: { activityId } });
-  return await prisma.activities.update({
+  return await prisma.activity.update({
     where: { id: activityId },
-    data: { occupation: sum },
+    data: { vacancies: { decrement: 1 } },
+  });
+}
+
+async function findOccupation(activityId: number) {
+  return await prisma.activityRegistration.findMany({
+    where: {
+      activityId,
+    },
+    include: {
+      activity: true,
+    },
   });
 }
 
@@ -42,6 +52,7 @@ const activityRepository = {
   updateActivityOcupation,
   findByUserId,
   findById,
+  findOccupation,
 };
 
 export default activityRepository;

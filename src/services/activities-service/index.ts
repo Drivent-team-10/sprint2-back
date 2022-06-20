@@ -10,6 +10,15 @@ async function findByEventId(id: number) {
   return response;
 }
 
+async function countOccupation(activityId: number) {
+  const activityRegistration = await activityRepository.findOccupation(activityId);
+
+  return {
+    vacancies: activityRegistration[0]?.activity.vacancies,
+    occupation: activityRegistration.length,
+  };
+}
+
 async function enroll(userId: number, activityId: number) {
   const existingActivities = await activityRepository.findByUserId(userId);
   const currentActivity = await activityRepository.findById(activityId);
@@ -32,9 +41,8 @@ function verifyConflictingActivities(activity1: Activity, activity2: Activity) {
   return isConflicting;
 }
 
-const activityService = {
+export const activityService = {
   findByEventId,
+  countOccupation,
   enroll,
 };
-
-export default activityService;
