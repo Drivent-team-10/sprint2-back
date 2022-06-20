@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { prisma } from '@/config';
 
 export interface InsertActivitiesUsers {
@@ -20,7 +19,6 @@ async function findByUserId(userId: number) {
   for (let i = 0; i < activitiesIds.length; i++) {
     const { activityId } = activitiesIds[i];
     const activity = await prisma.activities.findUnique({ where: { id: activityId } });
-    console.log('activity: ', activity);
     result.push(activity);
   }
   return result;
@@ -32,7 +30,6 @@ async function enrollInActivity({ activityId, userId }: InsertActivitiesUsers) {
 
 async function updateActivityOcupation(activityId: number) {
   const sum = await prisma.activitiesUsers.count({ where: { activityId } });
-  console.log('sum: ', sum);
   return await prisma.activities.update({
     where: { id: activityId },
     data: { occupation: sum },
